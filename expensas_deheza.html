@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis Expensas — Deheza 1648 UF 12 (6-B)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f7f4; color: #1a1a1a; font-size: 14px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+  h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .meta { font-size: 13px; color: #666; margin-bottom: 1.5rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 1.2rem; padding: 10px 14px; background: white; border-radius: 8px; border: 1px solid #e5e3de; }
+  .leg-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #555; }
+  .leg-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  .dot-o { background: #2d7a3a; } .dot-e { background: #b03030; } .dot-g { background: #b07000; }
+  .controls { display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .btn { font-size: 12px; padding: 5px 12px; cursor: pointer; border-radius: 6px; border: 1px solid #ccc; background: white; color: #444; transition: background 0.15s; }
+  .btn:hover { background: #f0ede8; }
+  table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; border: 1px solid #e5e3de; margin-bottom: 2rem; font-size: 13px; }
+  thead th { background: #f0ede8; font-weight: 600; font-size: 11px; color: #555; text-align: left; padding: 8px 10px; border-bottom: 1px solid #e0ddd8; }
+  th.r, td.r { text-align: right; }
+  th.c, td.c { text-align: center; width: 60px; }
+  tr.month-row td { background: #f5f3ef; font-weight: 600; font-size: 12px; color: #444; padding: 8px 10px; border-top: 2px solid #e0ddd8; }
+  tr.data-row td { padding: 7px 10px; border-bottom: 1px solid #f0ede8; vertical-align: middle; }
+  tr.data-row:hover td { background: #faf9f7; }
+  tr.data-row.disabled td { opacity: 0.45; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+  .b-o { background: #e6f4e8; color: #1a5c25; }
+  .b-e { background: #fde8e8; color: #8b1a1a; }
+  .b-g { background: #fef3dc; color: #7a4d00; }
+  .irr-tag { display: inline-block; font-size: 10px; font-weight: 600; color: #b03030; background: #fde8e8; padding: 1px 5px; border-radius: 3px; margin-left: 5px; vertical-align: middle; }
+  input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: #b03030; }
+  .section-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #1a1a1a; }
+  .irr-card { background: white; border: 1px solid #e5e3de; border-radius: 10px; overflow: hidden; margin-bottom: 2rem; }
+  .irr-item { padding: 14px 16px; border-bottom: 1px solid #f0ede8; }
+  .irr-item:last-child { border-bottom: none; }
+  .irr-label { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: #fde8e8; color: #8b1a1a; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .irr-title { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+  .irr-desc { font-size: 12px; color: #666; line-height: 1.65; }
+  .calc-card { background: white; border: 1px solid #e5e3de; border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; }
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+  .metric { background: #f8f7f4; border-radius: 8px; padding: 14px; text-align: center; }
+  .metric-label { font-size: 11px; color: #888; margin-bottom: 6px; }
+  .metric-val { font-size: 22px; font-weight: 700; color: #1a1a1a; }
+  .metric-val.red { color: #b03030; }
+  .metric-val.green { color: #2d7a3a; }
+  .calc-note { font-size: 12px; color: #999; text-align: center; }
+  @media(max-width:600px){ .metrics{grid-template-columns:1fr 1fr} .metric-val{font-size:17px} }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Análisis de expensas — Deheza 1648, UF 12 (6-B)</h1>
+  <p class="meta">Agosto 2025 – Marzo 2026 · Propietario: Vicente, Alejandro · Coeficiente de participación: 6,06%</p>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot dot-o"></div>Ordinario — responsabilidad del inquilino</div>
+    <div class="leg-item"><div class="leg-dot dot-e"></div>Extraordinario — responsabilidad del propietario</div>
+    <div class="leg-item"><div class="leg-dot dot-g"></div>Zona gris — discutible</div>
+    <div class="leg-item" style="color:#b03030;font-weight:600">⚑ Irregularidad detectada</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" onclick="setAll(true)">✓ Marcar todos los extraordinarios y zona gris</button>
+    <button class="btn" onclick="setAll(false)">✗ Desmarcar todos</button>
+    <button class="btn" onclick="setType('e',true)">Marcar solo extraordinarios</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:42%">Concepto</th>
+        <th style="width:13%">Clasificación</th>
+        <th class="r" style="width:16%">Monto consorcio</th>
+        <th class="r" style="width:16%">Tu parte (6,06%)</th>
+        <th class="c">Incluir</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <p class="section-title">Irregularidades detectadas</p>
+  <div class="irr-card">
+    <div class="irr-item">
+      <div class="irr-label">Obra sin asamblea</div>
+      <div class="irr-title">Garaje/cochera fraccionada en múltiples meses y proveedores</div>
+      <div class="irr-desc">La impermeabilización y pintura del garaje se distribuyó entre octubre 2025 y marzo 2026 con proveedores distintos (Berdún Gabriel, Fernández Alejandra, Alejandra Inés). El total acumulado supera los $9 millones. Fraccionar una obra de esa magnitud puede ser una estrategia para evitar la votación en asamblea, que es obligatoria por ley para obras extraordinarias de envergadura (Ley 941 CABA y reglamento de copropiedad).</div>
+    </div>
+    <div class="irr-item">
+      <div class="irr-label">Gasto ajeno al consorcio</div>
+      <div class="irr-title">Trabajos en UFs particulares (1°B y 7°A) cobrados a todos los copropietarios</div>
+      <div class="irr-desc">Trabajos en depto 1°B (cielo raso, pintura, revoque): agosto, septiembre, febrero y marzo — $2.050.000 acumulados. Depto 7°A (balcón, hormigón, fisuras): enero y febrero — $1.370.000. Ninguno de estos gastos tiene justificación legal para figurar en expensas comunes. Debieron facturarse directamente al propietario de cada unidad.</div>
+    </div>
+    <div class="irr-item">
+      <div class="irr-label">Obra disfrazada de mantenimiento</div>
+      <div class="irr-title">Sistema de cámaras renovado completamente en 6 meses</div>
+      <div class="irr-desc">Octubre: mantenimiento trimestral $120.000 (Convencomputers). Diciembre: instalación 2 cámaras nuevas $715.138. Marzo: reemplazo 3 cámaras por fallas $457.650. Total: $1.292.788 en 6 meses bajo denominaciones distintas, lo que sugiere una renovación completa del sistema fraccionada para evitar su clasificación como extraordinaria.</div>
+    </div>
+    <div class="irr-item">
+      <div class="irr-label">Cargo gremial imputado al consorcio</div>
+      <div class="irr-title">SERACARH — Capacitación encargado (enero 2026)</div>
+      <div class="irr-desc">Los $180.000 de "capacitación" corresponden a un aporte gremial del encargado (SERACARH). No es un gasto del consorcio transferible al inquilino bajo ningún concepto, sea ordinario o extraordinario.</div>
+    </div>
+    <div class="irr-item">
+      <div class="irr-label">Tratamiento inconsistente</div>
+      <div class="irr-title">ABL (AGIP) — aparece en columna propietario solo en algunos meses</div>
+      <div class="irr-desc">El ABL es responsabilidad exclusiva del propietario. Su tratamiento varía entre períodos: en algunos meses figura correctamente segregado en columna B (no cobrable al inquilino), en otros su clasificación no es uniforme. Merece revisión mes a mes con la administración.</div>
+    </div>
+  </div>
+
+  <p class="section-title">Calculadora de impacto — UF 6-B (6,06%)</p>
+  <div class="calc-card">
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-label">Total extraordinario seleccionado</div>
+        <div class="metric-val red" id="m-total">$0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Tu parte (× 6,06%)</div>
+        <div class="metric-val red" id="m-parte">$0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Ítems seleccionados</div>
+        <div class="metric-val" id="m-count">0</div>
+      </div>
+    </div>
+    <p class="calc-note">Tildá o destildá cada ítem en la tabla para incluirlo o excluirlo del cálculo en tiempo real</p>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  { mes: "Agosto 2025", items: [
+    { c: "Anticipo pintura pileta (Oviedo Eugenio)", t: "e", v: 715000 },
+    { c: "Trabajos pintura depto 1°B — cielo raso y paredes (Correa Pablo × 2)", t: "e", v: 750000, irr: true },
+    { c: "Fotocélula encendido automático + aplique LED cochera (Vassolo Jonatan)", t: "g", v: 210000 },
+    { c: "Sueldos y cargas sociales encargado (período julio 2025)", t: "o", v: 0 },
+    { c: "Servicios públicos (Edenor, AySA, AGIP/ABL)", t: "o", v: 0 },
+    { c: "Abonos periódicos: ascensor, tanques, matafuegos, Octopus", t: "o", v: 0 },
+    { c: "Gastos bancarios, limpieza, administración, seguros, internet", t: "o", v: 0 },
+  ]},
+  { mes: "Septiembre 2025", items: [
+    { c: "Cuota 2/2 mantenimiento piscina para uso temporada (Oviedo Eugenio)", t: "e", v: 715000 },
+    { c: "Anticipo trabajos entrada edificio — retiro Durlock y pintura (Correa Pablo)", t: "e", v: 1043000, irr: true },
+    { c: "Instalaciones eléctricas cochera y fachada (Vassolo Jonatan)", t: "g", v: 245000 },
+    { c: "Limpieza columna hasta 4° piso (Sayago Luis)", t: "g", v: 120000 },
+    { c: "Ascensores Auftec × 4 meses atrasados — abono regular de conservación", t: "o", v: 0 },
+    { c: "Sueldos, servicios públicos, administración, limpieza, seguros, internet", t: "o", v: 0 },
+  ]},
+  { mes: "Octubre 2025", items: [
+    { c: "Saldo trabajo entrada a cochera — reemplazo Durlock y perfiles (Correa Pablo)", t: "e", v: 1043000, irr: true },
+    { c: "Adicional trabajos planta baja — reemplazo Durlock y pintura cielo raso (Correa Pablo)", t: "e", v: 550000 },
+    { c: "Anticipo reparación e impermeabilización garaje (Berdún Gabriel)", t: "e", v: 1980000, irr: true },
+    { c: "Reubicación extintores + gabinete metálico + chapa baliza (Matafuegos del Parque)", t: "g", v: 261866, irr: true },
+    { c: "Mantenimiento trimestral cámaras 3 meses (Convencomputers)", t: "g", v: 120000, irr: true },
+    { c: "Mantenimiento periódico matafuegos — abono regular", t: "o", v: 0 },
+    { c: "Sueldos, servicios públicos, administración, limpieza, seguros", t: "o", v: 0 },
+  ]},
+  { mes: "Noviembre 2025", items: [
+    { c: "Adelanto trabajo de pintura en acceso de garaje y medianera exterior (Fernández Alejandra)", t: "e", v: 1600000, irr: true },
+    { c: "Final de trabajo de impermeabilización de garaje exterior (Fernández Alejandra)", t: "e", v: 1980000, irr: true },
+    { c: "Provisión e instalación paneles LED escaleras y dicroica LED fachada (Vassolo Jonatan)", t: "g", v: 213000 },
+    { c: "Mantenimiento matafuegos cuota 2/3", t: "o", v: 0 },
+    { c: "Sueldos (incluye convenio SUTERH), servicios públicos, administración, limpieza, seguros", t: "o", v: 0 },
+  ]},
+  { mes: "Diciembre 2025", items: [
+    { c: "Instalación de 2 cámaras nuevas en cochera (Convencomputers)", t: "e", v: 715138, irr: true },
+    { c: "Reparación botones cabina + fuente de diodos en tablero ascensor (Auftec × 2 ítems)", t: "g", v: 432820 },
+    { c: "Recarga matafuegos cuota 3/3", t: "o", v: 0 },
+    { c: "SAC + bono fin de año encargado — gasto obligatorio por convenio", t: "o", v: 0 },
+    { c: "Sueldos, servicios públicos, administración, limpieza, seguros, internet", t: "o", v: 0 },
+  ]},
+  { mes: "Enero 2026", items: [
+    { c: "Trabajo final de pintura en medianera de acceso a garaje exterior (Alejandra Inés)", t: "e", v: 1600000, irr: true },
+    { c: "Adelanto por trabajo de pintura en garage techado sobre cielo raso de concreto (Fernández Alejandra)", t: "e", v: 1100000, irr: true },
+    { c: "Reparación de fisura y hormigón suelto en pileta — cuota 1/2 (Berdún Gabriel)", t: "e", v: 400000 },
+    { c: "Service de piscina — reparación tapa visora electrobomba (Aquachlor)", t: "g", v: 302500 },
+    { c: "Reparación rampa cochera + reparación portón + barrera infrarroja (Vassolo × 2)", t: "g", v: 460000 },
+    { c: "Anticipo del 50% reparación hormigón y fisuras en balcón depto 7°A (Fernández Alejandra)", t: "e", v: 685000, irr: true },
+    { c: "Capacitación SERACARH — aporte gremial encargado", t: "e", v: 180000, irr: true },
+    { c: "Sueldos (diciembre 2025), servicios públicos, administración, limpieza, seguros", t: "o", v: 0 },
+  ]},
+  { mes: "Febrero 2026", items: [
+    { c: "Trabajo final de pintura sobre garage techado (Berdún Gabriel)", t: "e", v: 1100000, irr: true },
+    { c: "Reparación de fisura y hormigón en pileta — cuota 2/2 (Fernández Alejandra)", t: "e", v: 400000 },
+    { c: "Reubicación de extintores + 3 chapas baliza (Matafuegos del Parque)", t: "g", v: 144267 },
+    { c: "50% adelanto medición de puesta a tierra (Ocampo Jorge)", t: "g", v: 120000 },
+    { c: "Anticipo trabajos piso 1°B — cielo raso revoque, enduido y pintura (Correa Pablo)", t: "e", v: 650000, irr: true },
+    { c: "Cuota 2/2 reparación hormigón y fisuras balcón depto 7°A (Fernández Alejandra)", t: "e", v: 685000, irr: true },
+    { c: "Suplente encargado — reemplazo 4 días (Jiménez Camacho)", t: "o", v: 0 },
+    { c: "Sueldos, servicios públicos, administración, limpieza, seguros, internet", t: "o", v: 0 },
+  ]},
+  { mes: "Marzo 2026", items: [
+    { c: "Reemplazo de 3 cámaras que presentan fallas (Sposo Ricardo)", t: "e", v: 457650, irr: true },
+    { c: "Trabajos en piso 1°B — revoque, enduido y pintura cocina (Correa Pablo)", t: "e", v: 650000, irr: true },
+    { c: "Provisión y colocación de correa dentada puertas automáticas ascensor (Auftec)", t: "g", v: 246600 },
+    { c: "Reparaciones múltiples partes comunes: LED sótano/azotea/escalera, baño áreas comunes (Vassolo)", t: "g", v: 593000 },
+    { c: "Control periódico matafuegos + estampillas + abono instalaciones fijas contra incendios", t: "o", v: 0 },
+    { c: "Sueldos (vacaciones + período feb 2026), servicios públicos, administración, limpieza, seguros", t: "o", v: 0 },
+  ]},
+];
+
+function fmt(n) {
+  if (!n) return "—";
+  return "$" + Math.round(n).toLocaleString("es-AR");
+}
+
+function build() {
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+  DATA.forEach((month, mi) => {
+    const mrow = document.createElement("tr");
+    mrow.className = "month-row";
+    mrow.innerHTML = `<td colspan="5">${month.mes}</td>`;
+    tbody.appendChild(mrow);
+    month.items.forEach((item, ii) => {
+      const tr = document.createElement("tr");
+      tr.className = "data-row" + (item.t === "o" ? " disabled" : "");
+      const bc = item.t === "o" ? "b-o" : item.t === "e" ? "b-e" : "b-g";
+      const bl = item.t === "o" ? "Ordinario" : item.t === "e" ? "Extraordinario" : "Zona gris";
+      const irrHtml = item.irr ? '<span class="irr-tag">⚑ irregular</span>' : "";
+      const showCb = item.t !== "o" && item.v > 0;
+      const cbId = `cb_${mi}_${ii}`;
+      const checked = item.t === "e";
+      const parte = item.v ? fmt(item.v * 0.0606) : "—";
+      tr.innerHTML = `
+        <td>${item.c}${irrHtml}</td>
+        <td><span class="badge ${bc}">${bl}</span></td>
+        <td class="r">${fmt(item.v)}</td>
+        <td class="r">${showCb ? parte : "—"}</td>
+        <td class="c">${showCb ? `<input type="checkbox" id="${cbId}" data-v="${item.v}" ${checked ? "checked" : ""} onchange="recalc()">` : ""}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  });
+  recalc();
+}
+
+function recalc() {
+  let total = 0, count = 0;
+  document.querySelectorAll("#tbody input[type=checkbox]").forEach(cb => {
+    if (cb.checked) { total += parseFloat(cb.dataset.v) || 0; count++; }
+  });
+  document.getElementById("m-total").textContent = fmt(total);
+  document.getElementById("m-parte").textContent = fmt(total * 0.0606);
+  document.getElementById("m-count").textContent = count;
+}
+
+function setAll(val) {
+  document.querySelectorAll("#tbody input[type=checkbox]").forEach(cb => { cb.checked = val; });
+  recalc();
+}
+
+function setType(type, val) {
+  DATA.forEach((month, mi) => {
+    month.items.forEach((item, ii) => {
+      if (item.t === type && item.v > 0) {
+        const cb = document.getElementById(`cb_${mi}_${ii}`);
+        if (cb) cb.checked = val;
+      }
+    });
+  });
+  recalc();
+}
+
+build();
+</script>
+</body>
+</html>
